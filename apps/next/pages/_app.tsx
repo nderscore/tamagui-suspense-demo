@@ -5,7 +5,7 @@ import '@tamagui/font-inter/css/700.css'
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
 import Head from 'next/head'
-import React, { useMemo } from 'react'
+import React, { startTransition } from 'react'
 import type { SolitoAppProps } from 'solito'
 import 'raf/polyfill'
 
@@ -28,7 +28,13 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useRootTheme()
 
   return (
-    <NextThemeProvider onChangeTheme={setTheme}>
+    <NextThemeProvider
+      onChangeTheme={(next) => {
+        startTransition(() => {
+          setTheme(next)
+        })
+      }}
+    >
       <Provider disableRootThemeClass defaultTheme={theme}>
         {children}
       </Provider>
